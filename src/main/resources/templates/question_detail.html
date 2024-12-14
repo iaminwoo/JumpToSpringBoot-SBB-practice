@@ -29,7 +29,7 @@
     <!-- 답변 반복 끝  -->
     <!-- 답변 작성 -->
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
-        <div th:replace="~{form_errors :: formErrorsFragments}"></div>
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
 
         <textarea th:field="*{content}" rows="10" class="form-control"></textarea>
 
