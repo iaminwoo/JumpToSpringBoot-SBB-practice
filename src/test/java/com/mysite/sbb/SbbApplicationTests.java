@@ -1,6 +1,8 @@
 package com.mysite.sbb;
 
 import com.mysite.sbb.Question.QuestionRepository;
+import com.mysite.sbb.Question.QuestionService;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -9,6 +11,9 @@ class SbbApplicationTests {
 
 	@Autowired
 	private QuestionRepository questionRepository;
+
+	@Autowired
+	private QuestionService questionService;
 
 //	@Test
 //	void testJpa1() {
@@ -33,5 +38,15 @@ class SbbApplicationTests {
 //		Question question = all.get(0);
 //		assertEquals("sbb가 무엇인가요?", question.getSubject());
 //	}
+
+	@Test
+	// 테스트 게시물을 300개 만드는 메서드
+	void testJpa3() {
+		for(int i = 1 ; i <= 300 ; i++) {
+			String subject = String.format("테스트 데이터입니다. : [%03d]", i);
+			String content = "내용";
+			this.questionService.create(subject, content);
+		}
+	}
 
 }
