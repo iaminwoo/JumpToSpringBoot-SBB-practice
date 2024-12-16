@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -44,7 +45,12 @@ public class AnswerService {
     }
 
     public void vote(Answer answer, SiteUser siteUser) {
-        answer.getVoter().add(siteUser);
+        Set<SiteUser> votes = answer.getVoter();
+        if(votes.contains(siteUser)){
+            votes.remove(siteUser);
+        }else{
+            votes.add(siteUser);
+        }
         this.answerRepository.save(answer);
     }
 }

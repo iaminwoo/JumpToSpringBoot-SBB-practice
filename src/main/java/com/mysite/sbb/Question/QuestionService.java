@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -57,7 +58,12 @@ public class QuestionService {
     }
 
     public void vote(Question question, SiteUser siteUser) {
-        question.getVoter().add(siteUser);
+        Set<SiteUser> votes = question.getVoter();
+        if(votes.contains(siteUser)){
+            votes.remove(siteUser);
+        }else{
+            votes.add(siteUser);
+        }
         this.questionRepository.save(question);
     }
 }
