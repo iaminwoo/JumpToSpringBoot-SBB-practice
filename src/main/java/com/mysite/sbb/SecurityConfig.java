@@ -2,6 +2,8 @@ package com.mysite.sbb;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +31,16 @@ public class SecurityConfig {
                                 // 프레임에 포함된 웹 페이지가 동일한 사이트 (SAME ORIGIN)에서 제공되면 허용
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN
                         )))
+                .formLogin(formlogin ->
+                        // 로그인 URL
+                        formlogin.loginPage("/user/login")
+                                // 성공시 이동할 페이지
+                                .defaultSuccessUrl("/"))
+                .logout(logout ->
+                        logout.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                                .logoutSuccessUrl("/")
+                                // 로그아웃시 생성된 사용자 세션 삭제
+                                .invalidateHttpSession(true))
         ;
         return http.build();
     }
@@ -36,5 +48,12 @@ public class SecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    // 스프링 시큐리티의 인증을 처리
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+        // 내부적으로 UserSecurityService와 PasswordEncoder를 사용
     }
 }
