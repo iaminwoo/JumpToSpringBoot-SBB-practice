@@ -45,21 +45,31 @@ public class AnswerController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
-    public String answerModify(AnswerForm answerForm, @PathVariable("id") Integer id, Principal principal) {
+    public String answerModify(Model model, AnswerForm answerForm, @PathVariable("id") Integer id, Principal principal) {
         Answer answer = this.answerService.getAnswer(id);
         if (!answer.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
+        Question question = answer.getQuestion();
+        model.addAttribute("question", question);
+        model.addAttribute("answerId", id);
         answerForm.setContent(answer.getContent());
-        return "answer_form";
+        return "answer_form_2";
     }
+
+//    @GetMapping(value = "/detail/{id}")
+//    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
+//        Question question = this.questionService.getQuestion(id);
+//        model.addAttribute("question", question);
+//        return "question_detail";
+//    }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String answerModify(@Valid AnswerForm answerForm, BindingResult bindingResult,
                                @PathVariable("id") Integer id, Principal principal) {
         if (bindingResult.hasErrors()) {
-            return "answer_form";
+            return "answer_form_2";
         }
         Answer answer = this.answerService.getAnswer(id);
         if (!answer.getAuthor().getUsername().equals(principal.getName())) {
