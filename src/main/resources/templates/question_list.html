@@ -10,7 +10,7 @@
     </thead>
     <tbody>
     <tr th:each="question, loop : ${paging}">
-      <td th:text="${loop.count}"></td>
+      <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
       <td>
         <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
       </td>
@@ -22,20 +22,38 @@
   <div th:if="${!paging.isEmpty()}">
     <ul class="pagination justify-content-center">
       <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-        <a class="page-link"
-           th:href="@{|?page=${paging.number-1}|}">
+        <a class="page-link text-center"
+           th:href="@{|?page=0|}" style="width: 50px">
+          <span><<</span>
+        </a>
+      </li>
+
+      <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+        <a class="page-link text-center"
+           th:href="@{|?page=${paging.number-1}|}" style="width: 60px">
           <span>이전</span>
         </a>
       </li>
+
       <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
-          th:if="${page >= paging.number-5 and page <= paging.number+5}"
+          th:if="${(paging.number <= 2 and page <=4) or
+          (paging.number >= 2 and page >= paging.number-2 and page <= paging.number+2) or
+          (paging.number >= paging.totalPages-2 and page >= paging.totalPages-5)}"
           th:classappend="${page == paging.number} ? 'active'"
           class="page-item">
-        <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+        <a th:text="${page+1}" class="page-link d-flex align-items-center justify-content-center"
+           th:href="@{|?page=${page}|}" style="width: 40px"></a>
       </li>
+
       <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-        <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+        <a class="page-link text-center" th:href="@{|?page=${paging.number+1}|}" style="width: 60px">
           <span>다음</span>
+        </a>
+      </li>
+
+      <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+        <a class="page-link text-center" th:href="@{|?page=${paging.totalPages-1}|}" style="width: 50px">
+          <span>>></span>
         </a>
       </li>
     </ul>
