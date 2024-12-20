@@ -1,4 +1,4 @@
-package com.mysite.sbb.global.entity.exceptions;
+package com.mysite.sbb.global.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

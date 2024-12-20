@@ -1,6 +1,6 @@
 package com.mysite.sbb.question.service;
 
-import com.mysite.sbb.global.entity.exceptions.DataNotFoundException;
+import com.mysite.sbb.global.exceptions.DataNotFoundException;
 import com.mysite.sbb.question.entity.Question;
 import com.mysite.sbb.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
