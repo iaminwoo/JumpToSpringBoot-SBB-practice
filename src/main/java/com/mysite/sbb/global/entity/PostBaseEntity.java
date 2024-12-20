@@ -17,5 +17,5 @@ public class PostBaseEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime createDate;
 }
