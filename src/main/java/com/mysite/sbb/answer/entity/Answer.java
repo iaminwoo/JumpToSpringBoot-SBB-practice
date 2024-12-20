@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Answer extends PostBaseEntity {
-    // PostBaseEntity : id, content, createdDate
+    // PostBaseEntity : id, content, createdDate, author
     @ManyToOne
     private Question question;
 }

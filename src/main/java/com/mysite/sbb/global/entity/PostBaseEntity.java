@@ -1,5 +1,6 @@
 package com.mysite.sbb.global.entity;
 
+import com.mysite.sbb.user.entity.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +19,7 @@ public class PostBaseEntity {
     private String content;
 
     private LocalDateTime createDate;
+
+    @ManyToOne
+    private SiteUser author;
 }
