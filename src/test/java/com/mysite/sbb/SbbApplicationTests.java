@@ -1,5 +1,6 @@
 package com.mysite.sbb;
 
+import com.mysite.sbb.global.util.CommonUtil;
 import com.mysite.sbb.question.service.QuestionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,14 @@ class SbbApplicationTests {
 			String content = "내용";
 			this.questionService.createQuestion(subject, content, null);
 		}
+	}
+
+	@Autowired
+	private CommonUtil commonUtil;
+
+	@Test
+	void markdownTest() {
+		String str = "# 안녕하세요";
+		System.out.println(commonUtil.markdown(str));
 	}
 }
