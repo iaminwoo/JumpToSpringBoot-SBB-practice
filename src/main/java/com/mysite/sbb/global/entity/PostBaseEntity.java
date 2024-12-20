@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @MappedSuperclass
 @Getter
@@ -24,4 +25,7 @@ public class PostBaseEntity {
     private SiteUser author;
 
     private LocalDateTime modifyDate;
+
+    @ManyToMany
+    private Set<SiteUser> voter;
 }

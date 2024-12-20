@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Question extends PostBaseEntity {
-    // PostBaseEntity : id, content, createDate, author, modifyDate
+    // PostBaseEntity : id, content, createDate, author, modifyDate, voter
 
     @Column(length = 200)
     private String subject;

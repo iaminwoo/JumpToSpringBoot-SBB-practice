@@ -72,4 +72,13 @@ public class AnswerController {
         return "redirect:/question/detail/%s".formatted(answer.getQuestion().getId());
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String voteAnswer(Principal principal, @PathVariable("id") Integer answerId) {
+        Answer answer = this.answerService.getAnswer(answerId);
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        this.answerService.voteAnswer(answer, siteUser);
+        return "redirect:/question/detail/%s".formatted(answer.getQuestion().getId());
+    }
+
 }
