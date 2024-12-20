@@ -1,6 +1,8 @@
 package com.mysite.sbb.question.controller;
 
 import com.mysite.sbb.answer.entity.AnswerForm;
+import com.mysite.sbb.global.security.Check;
+import com.mysite.sbb.global.security.HTTPMethod;
 import com.mysite.sbb.question.entity.Question;
 import com.mysite.sbb.question.entity.QuestionForm;
 import com.mysite.sbb.question.service.QuestionService;
@@ -53,5 +55,37 @@ public class QuestionController {
         SiteUser user = this.userService.getUser(principal.getName());
         Question question = this.questionService.createQuestion(questionForm.getSubject(), questionForm.getContent(), user);
         return "redirect:/question/detail/%s".formatted(question.getId());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String modifyQuestion(QuestionForm questionForm, @PathVariable("id") Integer id, Principal principal) {
+        Question question = this.questionService.getQuestion(id);
+        Check.permission(question, HTTPMethod.MODIFY, principal);
+        questionForm.setSubject(question.getSubject());
+        questionForm.setContent(question.getContent());
+        return "question_form";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String modifyQuestion(@Valid QuestionForm questionForm, BindingResult bindingResult,
+                                 Principal principal, @PathVariable("id") Integer id) {
+        if(bindingResult.hasErrors()) {
+            return "question_form";
+        }
+        Question question = this.questionService.getQuestion(id);
+        Check.permission(question, HTTPMethod.MODIFY, principal);
+        this.questionService.modifyQuestion(question, questionForm.getSubject(), questionForm.getContent());
+        return String.format("redirect:/question/detail/%s", id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String deleteQuestion(Principal principal, @PathVariable("id") Integer id) {
+        Question question = this.questionService.getQuestion(id);
+        Check.permission(question, HTTPMethod.DELETE, principal);
+        this.questionService.deleteQuestion(question);
+        return "redirect:/";
     }
 }
